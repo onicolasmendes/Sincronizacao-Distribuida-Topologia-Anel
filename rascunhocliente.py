@@ -8,13 +8,13 @@ def client_request(client_id, host, port):
     
     #Conexão com o elemento do cluster
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((host, port))
+        s.connect((host, port))
     
-    requests_number = random.randit(10,50)
+        requests_number = random.randit(10,50)
     
     for i in range(requests_number):
         timestamp = time.time()  # Gera o timestamp no cliente
-        request = f"REQUEST {timestamp}"  # Formata a mensagem da solicitação com o timestamp
+        request = f"REQUEST"  # Formata a mensagem da solicitação com o timestamp
         s.sendall(request.encode('utf-8'))  # Envia a solicitação ao Cluster Sync
         print(f"Cliente {client_id}: Solicitação enviada com timestamp {timestamp}")
             
