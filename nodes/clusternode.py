@@ -61,8 +61,3 @@ def node(node_id, next_node_port, listen_port):
         enviatoken(next_node_sock,token)
         print(f"Enviado!")
     
-
-
-#node(0,12346,12345)
-#node(1,12347,12346)
-#node(2,12345,12347)
