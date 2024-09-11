@@ -9,12 +9,27 @@ def enviar_mensagem(socket,mensagem):
         print("algo de errado esta acontecendo")
         print(f"esperava \"confirmado\" entretanto foi recebido {confirmacao_de_chegada}")
         return
-    
+
+def enviar_estrutura(socket,dado):
+    socket.send(dado)
+    confirmacao_de_chegada = socket.recv(2048).decode('utf-8')
+    if(confirmacao_de_chegada == "confirmado"):
+        return
+    else:
+        print("algo de errado esta acontecendo")
+        print(f"esperava \"confirmado\" entretanto foi recebido {confirmacao_de_chegada}")
+        return
+
+
 def receber_mensagem(socket):
     dado = socket.recv(2048).decode('utf-8')
     socket.send("confirmado".encode('utf-8'))
     return dado
 
+def receber_estrutura(socket):
+    dado = socket.recv(2048)
+    socket.send("confirmado".encode('utf-8'))
+    return dado
 
 def conectar_endereco(sock,ip, port,retry_interval=5):
     while True:
@@ -30,15 +45,24 @@ def conectar_endereco(sock,ip, port,retry_interval=5):
 
 def receber_id(sock):
     #recebe id do cliente
-    return
+    id = receber_mensagem(sock)
+    id = int(id)
+    return id
 
 def tratar_cliente(sock,variavel_compartilhada):
     while True:
-        mensagem = receber_mensagem(sock)
-    
-        if(mensagem == 'REQUISISAO'):
-            variavel_compartilhada = True
-    
+        print("esperando estrutura...")
+        time = receber_estrutura(sock)
+        time = pickle.loads(time)
+        variavel_compartilhada[0] = True
+        variavel_compartilhada[1] = time
+        print(f'recebeu timestamp {time}')
+        while variavel_compartilhada[0] != False:
+            continue
+
+        enviar_mensagem(sock,"COMMITED")
+
+
 def countdown(segundos):
     while segundos > 0:
         print(f"Tempo restante: {segundos} segundos")
@@ -62,3 +86,18 @@ def enviatoken(sock,token):
         print(f"esperava \"confirmado\" entretanto foi recebido {confirmacao_de_chegada}")
         return
 
+def process_token(token, element_id):
+    if token.get(element_id) is None:
+        return False
+            
+    else:
+        # Verificar se sou o menor timestamp, ignorando valores None
+        smallest_key = min(
+            (key for key in token if token[key] is not None), 
+            key=token.get
+        )
+        
+        if smallest_key == element_id:
+            return True
+        else:
+            return False
