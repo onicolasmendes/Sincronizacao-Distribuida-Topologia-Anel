@@ -2,21 +2,20 @@ import socket
 import threading
 import time
 from funcoesauxiliares import *
-def node(node_id, next_node_port, listen_port):
+def node(node_id, next_node_port,ip, listen_port):
 
     variavel_compartilhada = [False,None]
 
-
     # Cria um socket para receber conexões
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_sock.bind(('localhost', listen_port))
+    server_sock.bind((ip, listen_port))
     server_sock.listen()
     
     #socket para conectar com o proximo nó
     next_node_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
     #iniciando thread para conectar com o proximo nó
-    node_thread = threading.Thread(target=conectar_endereco, args=(next_node_sock,'localhost',next_node_port))
+    node_thread = threading.Thread(target=conectar_endereco, args=(next_node_sock,ip,next_node_port))
     node_thread.start()
 
     # Aceita conexão do nó anterior
@@ -41,7 +40,7 @@ def node(node_id, next_node_port, listen_port):
 
     time.sleep(5)
     if node_id == 0:
-        initialdict ={id_client:None}
+        initialdict ={id_client:variavel_compartilhada[1]}
         countdown(5)
         enviatoken(next_node_sock,initialdict)
         print("token inicial enviado")
@@ -51,13 +50,11 @@ def node(node_id, next_node_port, listen_port):
         token = recebetoken(conn)
         
         print(f"Nó {node_id} recebeu o token: {token}")
-        
-        print(f"variavel compartilhada: {variavel_compartilhada[0]},{variavel_compartilhada[1]}")
-        
+
         # alocar espaço no token caso nao exista
         if id_client not in token:
             print(f"alocando espaço no token")
-            token[id_client] = None
+            token[id_client] = variavel_compartilhada[1]
 
         # caso o meu timestamp seja o menor
         if process_token(token,id_client) == True:
@@ -81,7 +78,4 @@ def node(node_id, next_node_port, listen_port):
         # Envia token para o próximo nó
         print(f"enviando token para o proximo nó: {next_node_port}...")
         
-    
         enviatoken(next_node_sock,token)
-        print(f"Enviado!")
-    

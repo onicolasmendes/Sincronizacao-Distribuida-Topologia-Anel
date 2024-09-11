@@ -52,7 +52,6 @@ def receber_id(sock):
 
 def tratar_cliente(sock,variavel_compartilhada):
     while True:
-        print("esperando estrutura...")
         time = receber_estrutura(sock)
         time = pickle.loads(time)
         variavel_compartilhada[0] = True

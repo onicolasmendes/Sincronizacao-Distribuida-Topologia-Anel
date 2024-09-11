@@ -5,9 +5,9 @@ import pickle
 import random
 from funcoesauxiliares import enviar_mensagem,receber_mensagem,enviar_estrutura,receber_estrutura
 
-def cliente(id,node_port):
+def cliente(id,ip,node_port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('localhost',node_port))
+    sock.connect((ip,node_port))
     print(f"conectado ao nó {node_port}")
 
     # enviando id
