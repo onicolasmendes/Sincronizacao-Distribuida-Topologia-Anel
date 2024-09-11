@@ -1,5 +1,6 @@
 import time
 import pickle
+
 def enviar_mensagem(socket,mensagem):
     socket.send(mensagem.encode('utf-8'))
     confirmacao_de_chegada = socket.recv(2048).decode('utf-8')
