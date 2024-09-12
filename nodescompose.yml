@@ -1,0 +1,64 @@
+services:
+  clusternode1:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: clusternode1
+    expose:
+      - "12345"
+    networks:
+      - tp2network
+    command: ["python3", "-u", "./nodes/node1.py"]
+  
+  clusternode2:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: clusternode2
+    expose:
+      - "12346"
+    networks:
+      - tp2network
+    command: ["python3", "-u", "./nodes/node2.py"]
+
+  clusternode3:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: clusternode3
+    expose:
+      - "12347"
+    networks:
+      - tp2network
+    command: ["python3", "-u", "./nodes/node3.py"]
+  
+  clusternode4:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: clusternode4
+    expose:
+      - "12348"
+    networks:
+      - tp2network
+    command: ["python3","-u", "./nodes/node4.py"]
+
+  clusternode5:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: clusternode5
+    expose:
+      - "12349"
+    networks:
+      - tp2network
+    command: ["python3","-u", "./nodes/node5.py"]
+networks:
+  tp2network:
+    external: true
+    driver: bridge
