@@ -50,7 +50,7 @@ def node(node_id, next_node_port,ip, listen_port, node_service_name):
         token = recebetoken(conn)
         
         print(f"Recebeu o token: {token}")
-        time.sleep(0.5)
+        time.sleep(0.3)
 
         # alocar espaço no token caso nao exista
         if id_client not in token:
