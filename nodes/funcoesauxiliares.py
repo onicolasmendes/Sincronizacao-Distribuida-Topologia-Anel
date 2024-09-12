@@ -28,7 +28,7 @@ def receber_mensagem(socket):
     return dado
 
 def receber_estrutura(socket):
-    dado = socket.recv(2048)
+    dado = socket.recv(8192)
     socket.send("confirmado".encode('utf-8'))
     return dado
 
