@@ -5,7 +5,7 @@ import random
 from funcoesauxiliares import *
 def node(node_id, next_node_port,ip, listen_port, node_service_name):
 
-    variavel_compartilhada = [False,None]
+    request = [False,None]
 
     # Cria um socket para receber conexões
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,11 +37,11 @@ def node(node_id, next_node_port,ip, listen_port, node_service_name):
     print(f"ID {id_client} do cliente recebido")
     
     # Criando thread para tratar o client
-    client_thread = threading.Thread(target=tratar_cliente, args=(client_conn,variavel_compartilhada))
+    client_thread = threading.Thread(target=tratar_cliente, args=(client_conn,request))
     client_thread.start()
 
     if node_id == 1:
-        initialdict ={id_client:variavel_compartilhada[1]}
+        initialdict ={id_client:request[1]}
         enviatoken(next_node_sock,initialdict)
         print("Token inicial enviado")
 
@@ -55,22 +55,22 @@ def node(node_id, next_node_port,ip, listen_port, node_service_name):
         # alocar espaço no token caso nao exista
         if id_client not in token:
             print(f"Alocando espaço no token")
-            token[id_client] = variavel_compartilhada[1]
+            token[id_client] = request[1]
 
         # caso o meu timestamp seja o menor
-        if process_token(token,id_client) == True:
+        elif process_token(token,id_client) == True:
             #acessar o recurso
             critic_acess_time = random.uniform(0.2, 1)
             print("Menor timestamp; acesso à região crítica")
             print(f"Entrando na região crítica [Tempo do sleep: {critic_acess_time:.2f} segundos]")
             token[id_client] = None
             print(f"Escrevendo NULL na posição {node_id} no TOKEN")
-            variavel_compartilhada[0] = False
-            variavel_compartilhada[1] = None
+            request[0] = False
+            request[1] = None
         
         # caso nao tenha timestamp e o cliente esteja esperando uma mensagem
-        elif variavel_compartilhada[0] == True and token[id_client] == None:
-            token[id_client] = variavel_compartilhada[1]
+        elif request[0] == True and token[id_client] == None:
+            token[id_client] = request[1]
 
         # se nao houver requisiçao nem nenhum timestamp no token, o token é passado para frente sem alteração
         # se houver requisiçao e o timestamp nao for o menor timestamp do token, o token é passado sem altera

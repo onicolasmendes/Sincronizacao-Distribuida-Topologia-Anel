@@ -51,17 +51,20 @@ def receber_id(sock):
     return id
 
 def tratar_cliente(sock,variavel_compartilhada):
-    while True:
-        time = receber_estrutura(sock)
-        time = pickle.loads(time)
-        variavel_compartilhada[0] = True
-        variavel_compartilhada[1] = time
-        print(f'Recebeu requisição do cliente [Timestamp {time}]')
-        while variavel_compartilhada[0] != False:
-            continue
+    try:    
+        while True:
+            time = receber_estrutura(sock)
+            time = pickle.loads(time)
+            variavel_compartilhada[0] = True
+            variavel_compartilhada[1] = time
+            print(f'Recebeu requisição do cliente [Timestamp {time}]')
+            while variavel_compartilhada[0] != False:
+                continue
 
-        enviar_mensagem(sock,"COMMITED")
+            enviar_mensagem(sock,"COMMITED")
 
+    except Exception as e:
+        print(f"Cliente encerrado!")
 
 def countdown(segundos):
     while segundos > 0:
