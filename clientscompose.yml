@@ -1,0 +1,63 @@
+services:
+  client1:  
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: client1
+    ports:
+      - "12345:12345"
+    networks:
+      - tp2network
+    command: ["python3","-u", "./clients/client1.py"]
+  
+  client2:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: client2
+    ports:
+      - "12346:12346"
+    networks:
+      - tp2network
+    command: ["python3", "-u", "./clients/client2.py"]
+  
+  client3:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: client3
+    ports:
+      - "12347:12347"
+    networks:
+      - tp2network
+    command: ["python3", "-u","./clients/client3.py"]
+
+  client4:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: client4
+    ports:
+      - "12348:12348"
+    networks:
+      - tp2network
+    command: ["python3", "-u","./clients/client4.py"]
+  
+  client5:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: client5
+    ports:
+      - "12349:12349"
+    networks:
+      - tp2network
+    command: ["python3","-u", "./clients/client5.py"]
+networks:
+  tp2network:
+    external: true
